@@ -6,18 +6,19 @@
   "issue_tracker": "https://github.com/Solaris-6/Qwen3-TTS/issues",
   "codeowners": [],
   "requirements": [
-    "transformers==4.57.3",
-    "torch==2.7.0",
-    "safetensors==0.5.3",
-    "sentencepiece==0.2.0",
-    "protobuf==5.29.2"
-  ],
+  "transformers>=4.57.3",
+  "torch>=2.9.0",
+  "numpy>=1.26.0",
+  "safetensors>=0.5.3",
+  "sentencepiece>=0.2.1",
+  "protobuf>=5.29.2"
+],
   "version": "1.0.0",
   "config_flow": true,
   "iot_class": "local_push",
   "loggers": ["qwen3_tts"],
   "quality_scale": "legacy",
-  "homeassistant": "2024.1.0",
+  "homeassistant": "2026.10.0",
   "ssdp": [],
   "dhcp": [],
   "zeroconf": []
