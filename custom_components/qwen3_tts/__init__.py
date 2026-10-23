@@ -2,7 +2,9 @@
 
 from __future__ import annotations
 
-from . import __version__
-from .tts import async_setup_entry
+# Rimossa la riga "from . import __version__" che causava ImportError
+# La costante è definita direttamente qui sotto
 
 __version__ = "1.0.0"
+
+from .tts import async_setup_entry

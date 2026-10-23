@@ -8,7 +8,6 @@ from typing import Any, Final
 
 import numpy as np
 import torch
-import probatio
 
 from homeassistant.components.tts import (
     Provider,
@@ -131,7 +130,7 @@ def _synthesize_audio(
     """Sintetizza audio da testo usando Qwen3-TTS."""
     try:
         # Prepara il testo con i token speciali TTS
-        tts_text = f"<tts_text_bos>{text}<tts_text_eod>"
+        tts_text = f"{text}"
 
         # Tokenizza l'input
         inputs = processor(
