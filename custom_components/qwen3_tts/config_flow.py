@@ -1,4 +1,4 @@
-"""Config flow for Qwen3-TTS integration."""
+"""Config flow for Qwen3-TTS integration.
 
 from __future__ import annotations
 
@@ -44,7 +44,26 @@ class Qwen3TTSConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             if model_path and not await self.hass.async_add_executor_job(
                 os.path.exists, model_path
             ):
-                errors[CONF_MODEL_PATH] = "model_path_not_found"
+                # Se il percorso non esiste, mostrare l'errore ma MANTENERE i valori inseriti
+                return self.async_show_form(
+                    step_id="user",
+                    data_schema=vol.Schema(
+                        {
+                            vol.Required(
+                                CONF_MODEL_PATH, default=user_input.get(
+                                    CONF_MODEL_PATH, DEFAULT_MODEL_PATH
+                                )
+                            ): str,
+                            vol.Optional(
+                                CONF_VOICE, default=user_input.get(CONF_VOICE, DEFAULT_VOICE)
+                            ): str,
+                            vol.Optional(
+                                CONF_LANGUAGE, default=user_input.get(CONF_LANGUAGE, DEFAULT_LANGUAGE)
+                            ): vol.In(SUPPORTED_LANGUAGES),
+                        }
+                    ),
+                    errors=errors,
+                )
             else:
                 return self.async_create_entry(
                     title="Qwen3-TTS",
@@ -58,12 +77,8 @@ class Qwen3TTSConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                     vol.Required(
                         CONF_MODEL_PATH, default=DEFAULT_MODEL_PATH
                     ): str,
-                    vol.Optional(
-                        CONF_VOICE, default=DEFAULT_VOICE
-                    ): str,
-                    vol.Optional(
-                        CONF_LANGUAGE, default=DEFAULT_LANGUAGE
-                    ): vol.In(SUPPORTED_LANGUAGES),
+                    vol.Optional(CONF_VOICE, default=DEFAULT_VOICE): str,
+                    vol.Optional(CONF_LANGUAGE, default=DEFAULT_LANGUAGE): vol.In(SUPPORTED_LANGUAGES),
                 }
             ),
             errors=errors,
@@ -110,15 +125,11 @@ class Qwen3TTSOptionsFlow(config_entries.OptionsFlow):
                     ): str,
                     vol.Optional(
                         CONF_VOICE,
-                        default=self.config_entry.data.get(
-                            CONF_VOICE, DEFAULT_VOICE
-                        ),
+                        default=self.config_entry.data.get(CONF_VOICE, DEFAULT_VOICE),
                     ): str,
                     vol.Optional(
                         CONF_LANGUAGE,
-                        default=self.config_entry.data.get(
-                            CONF_LANGUAGE, DEFAULT_LANGUAGE
-                        ),
+                        default=self.config_entry.data.get(CONF_LANGUAGE, DEFAULT_LANGUAGE),
                     ): vol.In(SUPPORTED_LANGUAGES),
                 }
             ),
