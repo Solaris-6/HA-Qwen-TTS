@@ -1,4 +1,4 @@
-"""Config flow for Qwen3-TTS integration.
+"""Config flow for Qwen3-TTS integration."""
 
 from __future__ import annotations
 
