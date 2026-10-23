@@ -1,0 +1,59 @@
+{
+  "$schema": "https://www.home-assistant.io/schemas/validation/service.yaml",
+  "clear_cache": {
+    "description": "Rimuove tutti i file TTS memorizzati in cache e svuota la memoria.",
+    "name": "Svuota cache TTS"
+  },
+  "say": {
+    "description": "Dice qualcosa usando la sintesi vocale su un media player.",
+    "fields": {
+      "cache": {
+        "description": "Memorizza questo messaggio localmente in modo che quando il testo viene richiesto di nuovo, l'output possa essere prodotto più rapidamente.",
+        "name": "Cache"
+      },
+      "entity_id": {
+        "description": "Media player su cui riprodurre il messaggio.",
+        "name": "Entità"
+      },
+      "language": {
+        "description": "Lingua da utilizzare per la sintesi vocale.",
+        "name": "Lingua"
+      },
+      "message": {
+        "description": "Il testo che desideri convertire in voce per poterlo ascoltare sul tuo dispositivo.",
+        "name": "Messaggio"
+      },
+      "options": {
+        "description": "Un dizionario contenente opzioni specifiche dell'integrazione.",
+        "name": "Opzioni"
+      }
+    },
+    "name": "Dichiara un messaggio TTS"
+  },
+  "speak": {
+    "description": "Parla usando la sintesi vocale su un media player.",
+    "fields": {
+      "cache": {
+        "description": "Memorizza questo messaggio localmente.",
+        "name": "Cache"
+      },
+      "language": {
+        "description": "Lingua da utilizzare per la sintesi vocale.",
+        "name": "Lingua"
+      },
+      "media_player_entity_id": {
+        "description": "Media player su cui riprodurre il messaggio.",
+        "name": "Entità media player"
+      },
+      "message": {
+        "description": "Il testo da convertire in voce.",
+        "name": "Messaggio"
+      },
+      "options": {
+        "description": "Opzioni specifiche dell'integrazione.",
+        "name": "Opzioni"
+      }
+    },
+    "name": "Parla"
+  }
+}

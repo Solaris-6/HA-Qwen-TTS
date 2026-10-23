@@ -1,0 +1,16 @@
+{
+  "name": "Qwen3-TTS",
+  "config": {
+    "model_path": "경로",
+    "voice": "목소리",
+    "language": "언어"
+  },
+  "options": {
+    "model_path": "경로",
+    "voice": "목소리",
+    "language": "언어"
+  },
+  "entity": "Qwen3-TTS",
+  "unsupported_language": "Qwen3-TTS는 언어 %s를 지원하지 않습니다",
+  "tts_error": "Qwen3-TTS TTS 생성 오류"
+}

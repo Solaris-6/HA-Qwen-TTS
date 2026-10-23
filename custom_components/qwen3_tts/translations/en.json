@@ -1,0 +1,16 @@
+{
+  "name": "Qwen3-TTS",
+  "config": {
+    "model_path": "Percorso modello",
+    "voice": "Voce",
+    "language": "Lingua"
+  },
+  "options": {
+    "model_path": "Percorso modello",
+    "voice": "Voce",
+    "language": "Lingua"
+  },
+  "entity": "Qwen3-TTS",
+  "unsupported_language": "Lingua %s non supportata da Qwen3-TTS",
+  "tts_error": "Errore durante la generazione TTS Qwen3-TTS"
+}

@@ -1,0 +1,24 @@
+{
+  "domain": "qwen3_tts",
+  "name": "Qwen3-TTS",
+  "description": "Qwen3-TTS text-to-speech integration",
+  "documentation": "https://github.com/Solaris-6/Qwen3-TTS",
+  "issue_tracker": "https://github.com/Solaris-6/Qwen3-TTS/issues",
+  "codeowners": [],
+  "requirements": [
+    "transformers==4.57.3",
+    "torch==2.7.0",
+    "safetensors==0.5.3",
+    "sentencepiece==0.2.0",
+    "protobuf==5.29.2"
+  ],
+  "version": "1.0.0",
+  "config_flow": true,
+  "iot_class": "local_push",
+  "loggers": ["qwen3_tts"],
+  "quality_scale": "legacy",
+  "homeassistant": "2024.1.0",
+  "ssdp": [],
+  "dhcp": [],
+  "zeroconf": []
+}

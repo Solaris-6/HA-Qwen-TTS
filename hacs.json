@@ -1,0 +1,7 @@
+{
+  "name": "Qwen3-TTS",
+  "homeassistant": "2024.1.0",
+  "category": "integration",
+  "render_readme": true,
+  "zip_release": false
+}

@@ -1,0 +1,30 @@
+{
+  "name": "Qwen3-TTS",
+  "domain": "qwen3_tts",
+  "config_flow": {
+    "step": {
+      "user": {
+        "data": {
+          "model_path": "Model path",
+          "voice": "Voice",
+          "language": "Language"
+        },
+        "description": "Configure Qwen3-TTS",
+        "title": "Configure Qwen3-TTS"
+      }
+    },
+    "options": {
+      "step": {
+        "init": {
+          "data": {
+            "model_path": "Model path",
+            "voice": "Voice",
+            "language": "Language"
+          },
+          "description": "Modify Qwen3-TTS options",
+          "title": "Qwen3-TTS Options"
+        }
+      }
+    }
+  }
+}

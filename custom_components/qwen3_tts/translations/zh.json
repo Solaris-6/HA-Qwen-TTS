@@ -1,0 +1,16 @@
+{
+  "name": "Qwen3-TTS",
+  "config": {
+    "model_path": "Model path",
+    "voice": "Voice",
+    "language": "Language"
+  },
+  "options": {
+    "model_path": "Model path",
+    "voice": "Voice",
+    "language": "Language"
+  },
+  "entity": "Qwen3-TTS",
+  "unsupported_language": "Language %s not supported by Qwen3-TTS",
+  "tts_error": "Qwen3-TTS TTS generation error"
+}
