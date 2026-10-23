@@ -1,8 +1,7 @@
 # Qwen3-TTS Requirements
 transformers>=4.57.3
 torch>=2.7.0
+numpy>=1.26.0
 safetensors>=0.5.3
 sentencepiece>=0.2.0
 protobuf>=5.29.2
-homeassistant>=2024.1.0
-```
