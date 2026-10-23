@@ -40,30 +40,10 @@ class Qwen3TTSConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         if user_input is not None:
             model_path = user_input[CONF_MODEL_PATH]
 
-            # Verifica che il percorso del modello esista
             if model_path and not await self.hass.async_add_executor_job(
                 os.path.exists, model_path
             ):
-                # Se il percorso non esiste, mostrare l'errore ma MANTENERE i valori inseriti
-                return self.async_show_form(
-                    step_id="user",
-                    data_schema=vol.Schema(
-                        {
-                            vol.Required(
-                                CONF_MODEL_PATH, default=user_input.get(
-                                    CONF_MODEL_PATH, DEFAULT_MODEL_PATH
-                                )
-                            ): str,
-                            vol.Optional(
-                                CONF_VOICE, default=user_input.get(CONF_VOICE, DEFAULT_VOICE)
-                            ): str,
-                            vol.Optional(
-                                CONF_LANGUAGE, default=user_input.get(CONF_LANGUAGE, DEFAULT_LANGUAGE)
-                            ): vol.In(SUPPORTED_LANGUAGES),
-                        }
-                    ),
-                    errors=errors,
-                )
+                errors["base"] = "model_path_not_found"
             else:
                 return self.async_create_entry(
                     title="Qwen3-TTS",
@@ -75,10 +55,23 @@ class Qwen3TTSConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             data_schema=vol.Schema(
                 {
                     vol.Required(
-                        CONF_MODEL_PATH, default=DEFAULT_MODEL_PATH
+                        CONF_MODEL_PATH,
+                        default=user_input.get(CONF_MODEL_PATH, DEFAULT_MODEL_PATH)
+                        if user_input
+                        else DEFAULT_MODEL_PATH,
                     ): str,
-                    vol.Optional(CONF_VOICE, default=DEFAULT_VOICE): str,
-                    vol.Optional(CONF_LANGUAGE, default=DEFAULT_LANGUAGE): vol.In(SUPPORTED_LANGUAGES),
+                    vol.Optional(
+                        CONF_VOICE,
+                        default=user_input.get(CONF_VOICE, DEFAULT_VOICE)
+                        if user_input
+                        else DEFAULT_VOICE,
+                    ): str,
+                    vol.Optional(
+                        CONF_LANGUAGE,
+                        default=user_input.get(CONF_LANGUAGE, DEFAULT_LANGUAGE)
+                        if user_input
+                        else DEFAULT_LANGUAGE,
+                    ): vol.In(SUPPORTED_LANGUAGES),
                 }
             ),
             errors=errors,
@@ -87,15 +80,11 @@ class Qwen3TTSConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
     @staticmethod
     def async_get_options_flow(config_entry):
         """Get the options flow for this handler."""
-        return Qwen3TTSOptionsFlow(config_entry)
+        return Qwen3TTSOptionsFlow()
 
 
 class Qwen3TTSOptionsFlow(config_entries.OptionsFlow):
     """Handle options flow for Qwen3-TTS."""
-
-    def __init__(self, config_entry: config_entries.ConfigEntry) -> None:
-        """Initialize options flow."""
-        self.config_entry = config_entry
 
     async def async_step_init(
         self, user_input: dict[str, Any] | None = None
@@ -119,17 +108,28 @@ class Qwen3TTSOptionsFlow(config_entries.OptionsFlow):
                 {
                     vol.Optional(
                         CONF_MODEL_PATH,
-                        default=self.config_entry.data.get(
-                            CONF_MODEL_PATH, DEFAULT_MODEL_PATH
+                        default=self.config_entry.options.get(
+                            CONF_MODEL_PATH,
+                            self.config_entry.data.get(
+                                CONF_MODEL_PATH, DEFAULT_MODEL_PATH
+                            ),
                         ),
                     ): str,
                     vol.Optional(
                         CONF_VOICE,
-                        default=self.config_entry.data.get(CONF_VOICE, DEFAULT_VOICE),
+                        default=self.config_entry.options.get(
+                            CONF_VOICE,
+                            self.config_entry.data.get(CONF_VOICE, DEFAULT_VOICE),
+                        ),
                     ): str,
                     vol.Optional(
                         CONF_LANGUAGE,
-                        default=self.config_entry.data.get(CONF_LANGUAGE, DEFAULT_LANGUAGE),
+                        default=self.config_entry.options.get(
+                            CONF_LANGUAGE,
+                            self.config_entry.data.get(
+                                CONF_LANGUAGE, DEFAULT_LANGUAGE
+                            ),
+                        ),
                     ): vol.In(SUPPORTED_LANGUAGES),
                 }
             ),

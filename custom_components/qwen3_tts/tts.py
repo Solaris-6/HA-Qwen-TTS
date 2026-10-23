@@ -9,13 +9,9 @@ from typing import Any, Final
 import numpy as np
 import torch
 
-from homeassistant.components.tts import (
-    Provider,
-    TtsAudioType,
-)
+from homeassistant.components.tts import Provider, TtsAudioType
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
-from homeassistant.helpers import config_validation as cv
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.typing import ConfigType, DiscoveryInfoType
 
@@ -24,6 +20,7 @@ from .const import (
     CONF_MODEL_PATH,
     CONF_VOICE,
     DEFAULT_LANGUAGE,
+    DEFAULT_MODEL_PATH,   # <-- AGGIUNTO
     DEFAULT_VOICE,
     DOMAIN,
     SAMPLE_RATE,
@@ -32,7 +29,6 @@ from .const import (
 
 _LOGGER: Final = logging.getLogger(__name__)
 
-# Cache globale per il modello e il processor
 _model: Any = None
 _processor: Any = None
 _model_loaded: bool = False
@@ -129,21 +125,16 @@ def _synthesize_audio(
 ) -> bytes:
     """Sintetizza audio da testo usando Qwen3-TTS."""
     try:
-        # Prepara il testo con i token speciali TTS
         tts_text = f"{text}"
-
-        # Tokenizza l'input
         inputs = processor(
             text=tts_text,
             language=language,
             return_tensors="pt",
         )
 
-        # Sposta su GPU se disponibile
         if torch.cuda.is_available():
             inputs = {k: v.cuda() for k, v in inputs.items()}
 
-        # Genera l'audio
         with torch.no_grad():
             outputs = model.generate(
                 **inputs,
@@ -154,18 +145,15 @@ def _synthesize_audio(
                 top_k=50,
             )
 
-        # Decodifica l'output audio
         audio = processor.decode(outputs[0], skip_special_tokens=False)
 
-        # Converti in bytes WAV
         audio_array = np.array(audio, dtype=np.float32)
         audio_array = (audio_array * 32767).astype(np.int16)
 
-        # Crea WAV in memoria
         buffer = io.BytesIO()
         with wave.open(buffer, "wb") as wav_file:
-            wav_file.setnchannels(1)  # Mono
-            wav_file.setsampwidth(2)  # 16-bit
+            wav_file.setnchannels(1)
+            wav_file.setsampwidth(2)
             wav_file.setframerate(SAMPLE_RATE)
             wav_file.writeframes(audio_array.tobytes())
 
@@ -191,8 +179,8 @@ class Qwen3TTSProvider(Provider):
         self.model_path = model_path
         self._attr_name = "Qwen3-TTS"
         self._attr_unique_id = "qwen3_tts"
-        self.default_voice = voice
-        self.default_language = language
+        self._default_voice = voice
+        self._default_language = language  # <-- attributo privato
 
     @property
     def supported_languages(self) -> list[str]:
@@ -200,16 +188,16 @@ class Qwen3TTSProvider(Provider):
         return SUPPORTED_LANGUAGES
 
     @property
-    def default_language(self) -> str | None:
+    def default_language(self) -> str:
         """Return the default language."""
-        return self.default_language
+        return self._default_language
 
     @property
     def default_options(self) -> dict[str, str]:
         """Return dict include default options."""
         return {
-            CONF_VOICE: self.default_voice,
-            CONF_LANGUAGE: self.default_language,
+            CONF_VOICE: self._default_voice,
+            CONF_LANGUAGE: self._default_language,
         }
 
     @property
@@ -224,8 +212,8 @@ class Qwen3TTSProvider(Provider):
         options: dict[str, Any],
     ) -> TtsAudioType:
         """Request TTS file from Qwen3-TTS."""
-        voice = options.get(CONF_VOICE, self.default_voice)
-        lang = options.get(CONF_LANGUAGE, self.default_language)
+        voice = options.get(CONF_VOICE, self._default_voice)
+        lang = options.get(CONF_LANGUAGE, self._default_language)
 
         if lang not in SUPPORTED_LANGUAGES:
             _LOGGER.error("Lingua %s non supportata da Qwen3-TTS", lang)
