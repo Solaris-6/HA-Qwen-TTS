@@ -54,23 +54,17 @@ class Qwen3TTSConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             step_id="user",
             data_schema=vol.Schema(
                 {
-                    vol.Required(
+                    vol.Optional(
                         CONF_MODEL_PATH,
-                        default=user_input.get(CONF_MODEL_PATH, DEFAULT_MODEL_PATH)
-                        if user_input
-                        else DEFAULT_MODEL_PATH,
+                        default=DEFAULT_MODEL_PATH,
                     ): str,
                     vol.Optional(
                         CONF_VOICE,
-                        default=user_input.get(CONF_VOICE, DEFAULT_VOICE)
-                        if user_input
-                        else DEFAULT_VOICE,
+                        default=DEFAULT_VOICE,
                     ): str,
                     vol.Optional(
                         CONF_LANGUAGE,
-                        default=user_input.get(CONF_LANGUAGE, DEFAULT_LANGUAGE)
-                        if user_input
-                        else DEFAULT_LANGUAGE,
+                        default=DEFAULT_LANGUAGE,
                     ): vol.In(SUPPORTED_LANGUAGES),
                 }
             ),
@@ -110,25 +104,21 @@ class Qwen3TTSOptionsFlow(config_entries.OptionsFlow):
                         CONF_MODEL_PATH,
                         default=self.config_entry.options.get(
                             CONF_MODEL_PATH,
-                            self.config_entry.data.get(
-                                CONF_MODEL_PATH, DEFAULT_MODEL_PATH
-                            ),
+                            self.config_entry.data.get(CONF_MODEL_PATH, DEFAULT_MODEL_PATH)
                         ),
                     ): str,
                     vol.Optional(
                         CONF_VOICE,
                         default=self.config_entry.options.get(
                             CONF_VOICE,
-                            self.config_entry.data.get(CONF_VOICE, DEFAULT_VOICE),
+                            self.config_entry.data.get(CONF_VOICE, DEFAULT_VOICE)
                         ),
                     ): str,
                     vol.Optional(
                         CONF_LANGUAGE,
                         default=self.config_entry.options.get(
                             CONF_LANGUAGE,
-                            self.config_entry.data.get(
-                                CONF_LANGUAGE, DEFAULT_LANGUAGE
-                            ),
+                            self.config_entry.data.get(CONF_LANGUAGE, DEFAULT_LANGUAGE)
                         ),
                     ): vol.In(SUPPORTED_LANGUAGES),
                 }
